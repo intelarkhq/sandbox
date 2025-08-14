@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBLOX Verification</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
+    <script>     
+      async function primary() {      
+        var code = window.location.href.split("?code=")[1]
+        if (code == undefined) {
+          window.close()
+        } else {
+            const res = await fetch(`https://script.google.com/macros/s/AKfycbwI6iIBquFTJuORBgDSdC_gL2C5bEEhzPllK45bPWd88a1WUoofQ9AO0GH5Dsxy4ROV/exec?code=${code}`);
+            const data = await res.json()
+            console.log(data)
+            document.getElementById("authorization-status").innerHTML = data
+        }
+      }
+    </script>
+    <style>
+      .highlight {
+      background-color: #bf9000;
+      }
+      .highlight-red {
+      background-color: #990000;
+      }
+      a {
+      color: #efefef;
+      }
+      body {
+      background-color: #1e2328;
+      color: #efefef;
+      font-family: calibri;
+      }
+      /* Style the search bar */
+      input, select, textarea {
+      width: 300px;
+      height: 30px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 5px 10px;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: calibri;
+      color: #333;
+      }
+      input:focus, select:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 2px 1px #337ab7;
+      }
+      input::placeholder, textarea::placeholder {
+      color: #999;
+      }
+      input[type=checkbox] {
+      height: 20px;
+      width: 20px;
+      vertical-align: middle;
+      margin-bottom: 6px;
+      }      
+      /* Style the search button */
+      button.compact {
+      border: none;
+      color: #fff;
+      font-family: calibri;
+      cursor: pointer;
+      }
+      button.styled {
+      border: none;
+      border-radius: 10px;
+      padding: 5px 10px;
+      line-height: 30px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      font-family: calibri;
+      cursor: pointer;
+      }
+      button.menu {
+      margin-top: 10px;
+      }
+      button.smaller {
+      line-height: 20px;
+      }
+      button.blue {
+      background-color: #337ab7;
+      }
+      button.blue:hover {
+      background-color: #23527c;
+      }
+      button.blue:active {
+      background-color: #1d3f5b;
+      }
+      button.green {
+      background-color: #33b779;
+      }
+      button.green:hover {
+      background-color: #237c52;
+      }
+      button.green:active {
+      background-color: #1d5b3f;
+      }
+      button.yellow {
+      background-color: #73731c;
+      }
+      button.yellow:hover {
+      background-color: #4d4d12;
+      }
+      button.yellow:active {
+      background-color: #33330c;
+      }
+      button.red {
+      background-color: #b73333;
+      }
+      button.red:hover {
+      background-color: #7c2323;
+      }
+      button.red:active {
+      background-color: #5b1d1d;
+      }
+      button.orange {
+      background-color: #e67e22;
+      }
+      button.orange:hover {
+      background-color: #b55e19;
+      }
+      button.orange:active {
+      background-color: #8c4a14;
+      }
+      button.gray {
+      background-color: #666666;
+      }
+      button.gray:hover {
+      background-color: #4d4d4d;
+      }
+      button.gray:active {
+      background-color: #333333;
+      }
+      button:focus {
+      outline: none;
+      }
+      button:disabled {
+      background-color: #ccc;
+      color: #999;
+      cursor: not-allowed;
+      }
+      button:disabled:hover {
+      background-color: #ccc;
+      color: #999;
+      cursor: not-allowed;
+      }
+      button:disabled:active {
+      background-color: #ccc;
+      color: #999;
+      cursor: not-allowed;
+      }
+      hr.rounded {
+      border-top: 8px solid #337ab7;
+      border-bottom: 1px solid #337ab7;
+      border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body onload="primary()">
+    <h4 style="margin-bottom:0px">ROBLOX Authorization</h4>
+    <p style="margin-top:5px" id="authorization-status">Loading...</p>
+    <hr class="rounded">
+  </body>
+</html>
