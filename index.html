@@ -61,6 +61,9 @@ const input = document.getElementById('cli-input');
 let authCode = localStorage.getItem('authCode');
 let accountId = localStorage.getItem('accountId');
 
+const commandHistory = [];
+let historyIndex = -1
+
 const API_URL = "https://script.google.com/macros/s/AKfycbwI6iIBquFTJuORBgDSdC_gL2C5bEEhzPllK45bPWd88a1WUoofQ9AO0GH5Dsxy4ROV/exec";
 
 const functions = {
@@ -126,6 +129,7 @@ const functions = {
                     localStorage.setItem('accountId', authData.accountId)
                     accountId = authData.accountId
                     localStorage.setItem('username', authData.username)
+                    username = authData.username
                     printToTerminal(`Successfully verified as ${authData.username}.`)
                 } else {
                     printToTerminal(`Invalid or expired request. Please try again. If this issue persists, contact Vasek_Stolba.`)
@@ -161,8 +165,25 @@ document.addEventListener('keydown', (e) => {
         e.key === 'Enter';
     const hasModifier = e.ctrlKey || e.metaKey || e.altKey;
 
-    if (!hasModifier && isTypingKey && document.activeElement !== input) {
-        input.focus();
+    if (!hasModifier && isTypingKey) {
+        historyIndex = commandHistory.length;
+        if (document.activeElement !== input) {
+            input.focus()
+        }
+    } else if (e.key === "ArrowUp" && (input.value == "" || historyIndex != commandHistory.length) && commandHistory.length > 0) {
+        historyIndex = Math.max(0, historyIndex - 1);
+        input.value = commandHistory[historyIndex]
+        e.preventDefault()
+    } else if (e.key === "ArrowDown" && (input.value == "" || historyIndex != commandHistory.length) && commandHistory.length > 0) {
+        historyIndex = Math.min(commandHistory.length, historyIndex + 1);
+        if (historyIndex === commandHistory.length) {
+            input.value = "";
+        } else {
+            input.value = commandHistory[historyIndex]
+        }
+        e.preventDefault()
+    } else if (e.key === "Escape") {
+        input.value = ""
     }
 });
 
@@ -194,6 +215,8 @@ async function processCommand(cmd, isUser = true) {
         printToTerminal(cmd);
     }
     input.value = '';
+    commandHistory.push(cmd);
+    historyIndex = commandHistory.length;
     try {
         if (cmd.split(" ")[0] in functions) {
             if (functions[cmd.split(" ")[0]].userForbidden) {
@@ -288,8 +311,6 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
-
-
 
 
 
