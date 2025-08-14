@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web CLI</title>
+<style>
+    body {
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        font-family: monospace;
+        padding: 20px;
+    }
+    #terminal {
+        background-color: #111;
+        padding: 10px;
+        border-radius: 6px;
+        height: 70vh;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        box-shadow: 0 0 10px #000;
+    }
+    #input-line {
+        display: flex;
+        margin-top: 10px;
+    }
+    #prompt {
+        color: #0f0;
+        padding-right: 5px;
+    }
+    #cli-input {
+        flex: 1;
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        font-family: monospace;
+        font-size: 1em;
+    }
+    #terminal a {
+        color: #4eedff8a;
+        text-decoration: underline;
+    }
+    #terminal a:hover {
+        color: #4eedffbe;
+    }
+</style>
+</head>
+<body>
+
+<div id="terminal"></div>
+<div id="input-line" disabled>
+    <span id="prompt">$</span>
+    <input type="text" id="cli-input" autofocus autocomplete="off">
+</div>
+
+<script>
+window.addEventListener( "message",
+  function (e) { 
+        alert(e.data);
+  },
+  false);
+
+const terminal = document.getElementById('terminal');
+const input = document.getElementById('cli-input');
+
+let authCode = localStorage.getItem('authCode');
+let accountId = localStorage.getItem('accountId');
+
+const API_URL = "https://script.google.com/macros/s/AKfycbwI6iIBquFTJuORBgDSdC_gL2C5bEEhzPllK45bPWd88a1WUoofQ9AO0GH5Dsxy4ROV/exec";
+
+const functions = {
+    echo: function(arg) {
+        printToTerminal(arg)
+    },
+    clear: function() {
+        terminal.innerHTML = ""
+    },
+    auth: async function() {
+        printToTerminal("Preparing ROBLOX verification...")
+        authCode = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
+        localStorage.setItem("authCode", authCode)
+        input.disabled = true
+        try {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    authCode: authCode,
+                    command: "auth"
+                })
+            });
+            const data = await res.json()
+            data.forEach(action => {
+                action.type = action.type.split(":")
+                switch (action.type[0]) {
+                    case "function":
+                        let fn = action.type[1]
+                        if (fn in functions) {
+                            functions[fn](action.data);
+                        } else {
+                            console.warn(`Function "${action.data}" not found.`)
+                        }
+                        break
+                    case "text":
+                        printToTerminal(action.data, action.type[1])
+                        break
+                }
+            });
+        } catch (err) {
+            printToTerminal(`Error: ${err.message}`);
+        }
+        input.disabled = false
+        input.focus()
+    },
+    openAuth: function(nonce) {
+        const oauthLink = `https://apis.roblox.com/oauth/v1/authorize?client_id=1177318814559888844&redirect_uri=${encodeURIComponent(API_URL)}&scope=openid&response_type=code&nonce=${encodeURIComponent(nonce)}`
+        printToTerminal("Please continue in the ROBLOX verification window...")
+        input.disabled = true
+        newWindow = window.open(oauthLink, "_blank", "width=600,height=700")
+        if (newWindow) {
+            newWindow.focus();
+            window.addEventListener('message', function(event) {
+                // Make sure it's from your domain (Apps Script deploy URL will have its own origin)
+                //if (event.origin !== 'https://script.google.com') return;
+
+                console.log('OAuth complete:', event.data);
+                newWindow.close();
+            });
+        } else {
+            printToTerminal("Popup blocked! Please allow popups for this site.")
+            alert("Popup blocked! Please allow popups for this site.")
+        }
+        input.disabled = false
+    }
+}
+
+functions.openAuth.userForbidden = true
+
+if ((!accountId) || (accountId == null)) {
+    printToTerminal("start", "user");
+    printToTerminal(`You are not signed in. Use "auth" to sign in with your ROBLOX account.`, "warning")
+    printToTerminal(`By signing in, you consent to the use of local storage for session continuity. No cookies are used. You further confirm that you have read and accepted the following:`)
+    printToTerminal(`   Terms of Service, available at https://pathos-cria.github.io/database/terms-of-service`)
+    printToTerminal(`   Privacy Policy, available at https://pathos-cria.github.io/database/privacy-policy`)
+} else {
+    processCommand("start")
+}
+
+input.disabled = false
+input.focus()
+
+document.addEventListener('keydown', (e) => {
+    const isTypingKey =
+        e.key.length === 1 || // single characters
+        e.key === 'Backspace' ||
+        e.key === 'Enter';
+    const hasModifier = e.ctrlKey || e.metaKey || e.altKey;
+
+    if (!hasModifier && isTypingKey && document.activeElement !== input) {
+        input.focus();
+    }
+});
+
+function printToTerminal(text, type = "system") {
+    const span = document.createElement('div');
+    span.textContent = ((type == "user") ? '$ ' : '') + text;
+    switch (type) {
+        case "user":
+            span.style.color = 'rgb(0, 255, 0)';
+            break;
+        case "warning":
+            span.style.color = 'rgb(255, 0, 0)';
+            break;
+        case "request":
+            span.style.color = 'rgb(0, 90, 255)';
+            break;
+    }
+    if (type != "user") {
+        span.innerHTML = linkify(span.innerHTML)
+    }
+    terminal.appendChild(span);
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+async function processCommand(cmd, isUser = true) {
+    if (isUser) {
+        printToTerminal(cmd, "user");
+    } else {
+        printToTerminal(cmd);
+    }
+    input.value = '';
+    try {
+        if (cmd.split(" ")[0] in functions) {
+            if (functions[cmd.split(" ")[0]].userForbidden) {
+                printToTerminal("Error: Forbidden")
+                return true
+            } else {
+                input.disabled = true
+                parseCLIInput(cmd)
+                input.disabled = false
+                input.focus()
+                return true
+            }
+        }
+        input.disabled = true
+        const res = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                accountId: accountId,
+                authCode: authCode,
+                command: cmd
+            })
+        });
+        const data = await res.json()
+        data.forEach(action => {
+            action.type = action.type.split(":")
+            switch (action.type[0]) {
+                case "function":
+                    let fn = action.type[1]
+                    if (fn in functions) {
+                        functions[fn](action.data);
+                    } else {
+                        console.warn(`Function "${action.data}" not found.`)
+                    }
+                    break
+                case "text":
+                    printToTerminal(action.data, action.type[1])
+                    break
+            }
+        });
+        input.disabled = false
+        input.focus()
+    } catch (err) {
+        printToTerminal(`Error: ${err.message}`);
+        input.disabled = false
+        input.focus()
+    }
+}
+
+function linkify(text) {
+    // Regex to detect URLs (http, https, www)
+    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi;
+    return text.replace(urlRegex, (url) => {
+        let href = url;
+        if (!href.startsWith('http')) {
+            href = 'http://' + href; // Support bare www. links
+        }
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+
+function parseCLIInput(input) {
+  input = input.trim();
+  if (!input) return;
+
+  // Match quoted strings or unquoted words
+  const args = [];
+  const regex = /[^\s"]+|"([^"]*)"/g;
+  let match;
+  while ((match = regex.exec(input)) !== null) {
+    // If quoted, match[1] exists; otherwise match[0]
+    const arg = match[1] ?? match[0];
+    const n = Number(arg);
+    args.push(isNaN(n) ? arg : n); // convert numbers automatically
+  }
+
+  const cmdName = args.shift(); // first word is the command
+  if (!(cmdName in functions)) {
+    printToTerminal(`Unknown command: ${cmdName}`);
+    return;
+  }
+
+  functions[cmdName](...args);
+}
+
+
+input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && input.value.trim() !== '') {
+        processCommand(input.value.trim());
+    }
+});
+</script>
+
+</body>
+</html>
