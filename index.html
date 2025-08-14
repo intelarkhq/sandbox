@@ -113,7 +113,7 @@ const functions = {
         input.focus()
     },
     openAuth: function(nonce) {
-        const oauthLink = `https://apis.roblox.com/oauth/v1/authorize?client_id=1177318814559888844&redirect_uri=${encodeURIComponent(API_URL)}&scope=openid&response_type=code&nonce=${encodeURIComponent(nonce)}`
+        const oauthLink = `https://apis.roblox.com/oauth/v1/authorize?client_id=1177318814559888844&redirect_uri=${encodeURIComponent("https://intelarkhq.github.io/sandbox/redirect")}&scope=openid&response_type=code&nonce=${encodeURIComponent(nonce)}`
         printToTerminal("Please continue in the ROBLOX verification window...")
         input.disabled = true
         newWindow = window.open(oauthLink, "_blank", "width=600,height=700")
@@ -283,3 +283,4 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
