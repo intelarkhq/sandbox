@@ -215,7 +215,9 @@ async function processCommand(cmd, isUser = true) {
         printToTerminal(cmd);
     }
     input.value = '';
-    commandHistory.push(cmd);
+    if (cmd != commandHistory[commandHistory.length-1]) {
+        commandHistory.push(cmd);
+    }
     historyIndex = commandHistory.length;
     try {
         if (cmd.split(" ")[0] in functions) {
@@ -311,6 +313,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
