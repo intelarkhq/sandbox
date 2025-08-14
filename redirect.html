@@ -16,7 +16,6 @@
             console.log(data)
             window.opener.postMessage(JSON.stringify(data), window.location.origin)
             window.close()
-            document.getElementById("authorization-status").innerHTML = JSON.stringify(data)
         }
       }
     </script>
