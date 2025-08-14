@@ -256,6 +256,12 @@ async function processCommand(cmd, isUser = true) {
                 case "text":
                     printToTerminal(action.data, action.type[1])
                     break
+                case "image":
+                    const div = document.createElement('div');
+                    div.innerHTML = `<img src="${action.data.src}" width="${action.data.width}" height="${action.data.height}" style="float: ${action.data.float};">`;
+                    terminal.appendChild(div);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    break
             }
         });
         input.disabled = false
@@ -313,6 +319,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
