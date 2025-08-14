@@ -55,12 +55,6 @@
 </div>
 
 <script>
-window.addEventListener( "message",
-  function (e) { 
-        alert(e.data);
-  },
-  false);
-
 const terminal = document.getElementById('terminal');
 const input = document.getElementById('cli-input');
 
@@ -120,8 +114,7 @@ const functions = {
         if (newWindow) {
             newWindow.focus();
             window.addEventListener('message', function(event) {
-                // Make sure it's from your domain (Apps Script deploy URL will have its own origin)
-                //if (event.origin !== 'https://script.google.com') return;
+                if (event.origin !== window.location.origin) return;
 
                 console.log('OAuth complete:', event.data);
                 newWindow.close();
@@ -283,4 +276,5 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
