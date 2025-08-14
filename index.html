@@ -118,6 +118,15 @@ const functions = {
 
                 console.log('OAuth complete:', event.data);
                 newWindow.close();
+
+                let authData = event.data
+                if (authData.success) {
+                    localStorage.setItem('accountId', authData.accountId)
+                    accountId = authData.accountId
+                    printToTerminal(`Successfully verified as ${authData.username}.`)
+                } else {
+                    printToTerminal(`Invalid or expired request. Please try again. If this issue persists, contact Vasek_Stolba.`)
+                }
             });
         } else {
             printToTerminal("Popup blocked! Please allow popups for this site.")
@@ -276,5 +285,6 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
