@@ -125,6 +125,8 @@ const functions = {
                 if (authData.success) {
                     localStorage.setItem('accountId', authData.accountId)
                     accountId = authData.accountId
+                    localStorage.setItem('username', authData.username)
+                    username = authData.username
                     printToTerminal(`Successfully verified as ${authData.username}.`)
                 } else {
                     printToTerminal(`Invalid or expired request. Please try again. If this issue persists, contact Vasek_Stolba.`)
@@ -287,6 +289,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
