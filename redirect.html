@@ -14,7 +14,11 @@
             const res = await fetch(`https://script.google.com/macros/s/AKfycbwI6iIBquFTJuORBgDSdC_gL2C5bEEhzPllK45bPWd88a1WUoofQ9AO0GH5Dsxy4ROV/exec?code=${code}`);
             const data = await res.json()
             console.log(data)
-            document.getElementById("authorization-status").innerHTML = data
+            console.log(window.opener)
+            if (data.accountId != undefined) {
+              localStorage.setItem("accountId", data.accountId)
+            }
+            document.getElementById("authorization-status").innerHTML = JSON.stringify(data)
         }
       }
     </script>
