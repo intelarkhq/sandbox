@@ -258,7 +258,7 @@ async function processCommand(cmd, isUser = true) {
                     break
                 case "image":
                     const div = document.createElement('div');
-                    div.innerHTML = `\n<img src="${action.data.src}" width="${action.data.width}" height="${action.data.height}" style="${action.data.style};">\n`;
+                    div.innerHTML = `\n<img src="${action.data.src}" width="${action.data.width}" height="${action.data.height}" style="${action.data.style};">\n\n`;
                     terminal.appendChild(div);
                     terminal.scrollTop = terminal.scrollHeight;
                     break
@@ -319,6 +319,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
