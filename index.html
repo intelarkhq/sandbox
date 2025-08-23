@@ -170,11 +170,11 @@ document.addEventListener('keydown', (e) => {
         if (document.activeElement !== input) {
             input.focus()
         }
-    } else if (e.key === "ArrowUp" && (input.value == "" || historyIndex != commandHistory.length) && commandHistory.length > 0) && input.disabled == false {
+    } else if (e.key === "ArrowUp" && (input.value == "" || historyIndex != commandHistory.length) && commandHistory.length > 0 && input.disabled == false) {
         historyIndex = Math.max(0, historyIndex - 1);
         input.value = commandHistory[historyIndex]
         e.preventDefault()
-    } else if (e.key === "ArrowDown" && (input.value == "" || historyIndex != commandHistory.length) && commandHistory.length > 0) && input.disabled == false {
+    } else if (e.key === "ArrowDown" && (input.value == "" || historyIndex != commandHistory.length) && commandHistory.length > 0 && input.disabled == false) {
         historyIndex = Math.min(commandHistory.length, historyIndex + 1);
         if (historyIndex === commandHistory.length) {
             input.value = "";
@@ -319,6 +319,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
