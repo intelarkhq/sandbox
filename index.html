@@ -220,6 +220,7 @@ async function processCommand(cmd, isUser = true) {
         printToTerminal(cmd);
     }
     input.value = '';
+    document.getElementById("prompt").innerHTML = "$";
     if (cmd != commandHistory[commandHistory.length-1]) {
         commandHistory.push(cmd);
     }
@@ -339,6 +340,7 @@ input.addEventListener('input', e => {
 
 </body>
 </html>
+
 
 
 
