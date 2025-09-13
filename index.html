@@ -194,7 +194,10 @@ document.addEventListener('keydown', (e) => {
 
 function printToTerminal(text, type = "system") {
     const span = document.createElement('div');
-    span.textContent = ((type == "user") ? '$ ' : '') + text;
+    if (text.startsWith("files") {
+        span.textContent = currDir + " "
+    }
+    span.textContent += ((type == "user") ? '$ ' : '') + text;
     switch (type) {
         case "user":
             span.style.color = 'rgb(0, 255, 0)';
@@ -340,6 +343,7 @@ input.addEventListener('input', e => {
 
 </body>
 </html>
+
 
 
 
