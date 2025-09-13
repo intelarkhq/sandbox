@@ -194,7 +194,7 @@ document.addEventListener('keydown', (e) => {
 
 function printToTerminal(text, type = "system") {
     const span = document.createElement('div');
-    if (text.startsWith("files") {
+    if (text.startsWith("files")) {
         span.textContent = currDir + " "
     }
     span.textContent += ((type == "user") ? '$ ' : '') + text;
@@ -343,6 +343,7 @@ input.addEventListener('input', e => {
 
 </body>
 </html>
+
 
 
 
