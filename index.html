@@ -64,6 +64,7 @@ let accountId = localStorage.getItem('accountId');
 
 const commandHistory = [];
 let historyIndex = -1
+let currDir
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwI6iIBquFTJuORBgDSdC_gL2C5bEEhzPllK45bPWd88a1WUoofQ9AO0GH5Dsxy4ROV/exec";
 
@@ -141,6 +142,9 @@ const functions = {
             alert("Popup blocked! Please allow popups for this site.")
         }
         input.disabled = false
+    },
+    updateCurrDir: function(newDir) {
+        currDir = newDir
     }
 }
 
@@ -320,6 +324,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
