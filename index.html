@@ -267,6 +267,12 @@ async function processCommand(cmd, isUser = true) {
                     terminal.appendChild(div);
                     terminal.scrollTop = terminal.scrollHeight;
                     break
+                case "html":
+                    const div = document.createElement('div');
+                    div.innerHTML = action.data
+                    terminal.appendChild(div)
+                    terminal.scrollTop = terminal.scrollHeight;
+                    break
             }
         });
         input.disabled = false
@@ -324,6 +330,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
