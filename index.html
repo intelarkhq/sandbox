@@ -328,10 +328,18 @@ input.addEventListener('keydown', e => {
         processCommand(input.value.trim());
     }
 });
+input.addEventListener('input', e => {
+    if (input.value.startsWith("files")) {
+        document.getElementById("prompt").innerHTML = currDir + " $"
+    } else {
+        document.getElementById("prompt").innerHTML = "$"
+    }
+});
 </script>
 
 </body>
 </html>
+
 
 
 
