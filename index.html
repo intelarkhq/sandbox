@@ -279,7 +279,7 @@ async function processCommand(cmd, isUser = true) {
         input.disabled = false
         input.focus()
     } catch (err) {
-        printToTerminal(`Error: ${err.message}`);
+        printToTerminal(`Error: Server error. Contact the developer if this issue persists.`);
         input.disabled = false
         input.focus()
     }
@@ -331,6 +331,7 @@ input.addEventListener('keydown', e => {
 
 </body>
 </html>
+
 
 
 
